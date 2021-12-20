@@ -13,7 +13,6 @@ body {
 }
 
 #main .game-box {
-  box-sizing: content-box;
   display: flex;
   justify-content: center;
   border: 2px solid white;
@@ -87,7 +86,7 @@ body {
 
 @media screen and (max-width: 768px) {
   .boxes {
-    height: 10px !important;
+    height: 60px !important;
   }
 }
 
