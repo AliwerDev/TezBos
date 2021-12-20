@@ -1,0 +1,98 @@
+body{
+    background: #0F2027;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.orange{
+    background: orange;
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.7);
+}
+
+#main{
+    .game-box{
+        box-sizing: content-box;
+        display: flex;
+        justify-content: center;
+        border: 2px solid white;
+        margin: 0 auto;
+        padding: 10px;
+        width: 100%;
+        max-width: 500px;
+        min-height: calc(100vh - 40px);
+        .starting-box{
+            display: block;
+            #start{
+                border: none;
+                outline: none;
+                padding: 10px 30px;
+                transition: all .3s ease;
+                border-radius: 10px;
+                font-weight: bold;
+                font-size: 24px;
+                &:hover{
+                    transform: scale(.9);
+                }
+            }
+        }
+        .main-box{
+            display: none;
+            width: 100%;
+            height: 100% !important;
+            .bord{
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .boxes{
+                width: 25%;
+                max-width: 100px;
+                height: 100px;
+                padding: 4px;
+            }
+            .box{
+                width: 100%;
+                height: 100%;
+                border-radius: 6px;
+                background: #2C5364;
+                cursor: pointer;
+            }
+
+            //info
+            .info{
+                width: 100%;
+                //display: flex;
+                text-align: center;
+            }
+
+            // line
+            .line{
+                width: 100%;
+                height: 20px;
+                border-radius: 10px;
+                background-color: rgba(255, 255, 255, 0.3);
+                overflow: hidden;
+                .min-line{
+                    width: 100%;
+                    border-radius: 10px;
+                    height: 100%;
+                    background: #Fff;
+                    transition: all 1s linear;
+                }
+            }
+        }
+        .finishing-box{
+            width: 100%;
+            height: 100% !important;
+            background: aqua;
+            display: none;
+        }
+        
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .boxes{
+        height: 60px;
+    }
+}
