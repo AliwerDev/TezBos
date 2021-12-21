@@ -5,16 +5,18 @@ const audioWin = document.querySelector("#audioWin");
 const audio = document.querySelector("#audio");
 const error = document.querySelector("#error");
 const start = document.querySelector("#start");
+const yourScore = document.querySelector("#yourScore");
+const yourRecord = document.querySelector("#yourRecord");
+const tbody = document.querySelector("#tbody");
+
 
 start.addEventListener('click', () => {
+    startTime();
     startBox.style.display = "none";
     mainBox.style.display = "block";
+    audio.play();
 })
 
-
-function startMusic(){
-    audio.play();
-}
 
 //  VARIABLES OF MIAN
 const board = document.querySelector(".bord")
@@ -41,10 +43,10 @@ let countScore = 0;
 const maxTime = 15;
 let timeCounter = 15;
 
+
+
 function reload() {
     randNum = randomNumber(24, 0);
-
-
 
 
     boxes.forEach((element, index) => {
@@ -79,19 +81,76 @@ function paintBoxWithRandom(oldElement){
     }
 }paintBoxWithRandom();
 
+let isOldScore = false;
+function checkBestScore(){
+    if(isOldScore) return 0;
+
+    yourScore.innerHTML = countScore;
+    let oldBestScore = +localStorage.getItem("BestScore");
+
+    if(countScore > oldBestScore){
+        localStorage.setItem("BestScore", countScore);
+        yourRecord.innerHTML = countScore;
+        yourScore.style.color = "green";
+
+    }else{
+        yourRecord.innerHTML = oldBestScore;
+        yourScore.style.color = "red";
+    }
+
+    let allScores = JSON.parse(localStorage.getItem("allScores")) || [];
+
+    let scores = [...allScores, countScore].sort((a, b) => a - b);
+    scores = [...new Set(scores)];
+
+    let topScores = scores.slice(-7);
+
+    localStorage.setItem("allScores", JSON.stringify(scores))
+
+    topScores.reverse().map((e, i) => {
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
+
+        td1.innerHTML = i + 1;
+        td2.innerHTML = e;
+        td3.innerHTML = e;
+
+        if(e === countScore){
+            tr.style.backgroundColor = "aqua";
+            td3.style.color = "black";
+            td2.style.color = "black";
+            td1.style.color = "black";
+            td3.style.fontWeight = "bold";
+            td2.style.fontWeight = "bold";
+            td1.style.fontWeight = "bold";
+        }
+
+        tbody.appendChild(tr);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+    })
+
+}
+
 function getIdElement(element, elementId){
     if (randNum === elementId){
         audioWin.play();
         countScore ++;
-        score.innerHTML = countScore;
         paintBoxWithRandom(elementId + "");
-        element.style.backgroundColor = "#2C5364"
+        score.innerHTML = countScore;
+        element.style.backgroundColor = "#1c6174"
     }else{
         error.play();
         countScore --;
         if (countScore <= 0){
+            countScore = 0;
+            checkBestScore();
             mainBox.style.display = "none";
             finishBox.style.display = "block"
+            clearInterval(interval);
         }
         score.innerHTML = countScore;
     }
@@ -105,6 +164,7 @@ function changeWidthLine(){
 function startTime() {
     interval = setInterval(() => {
         if(timeCounter <= 0){
+            checkBestScore();
             mainBox.style.display = "none";
             finishBox.style.display = "block"
             clearInterval(interval);
@@ -113,4 +173,9 @@ function startTime() {
         timeCounter --;
         changeWidthLine();
     }, 1000)
-}startTime();
+}
+
+
+function reloadPage(){
+    window.location.reload();
+}
