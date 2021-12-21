@@ -26,7 +26,9 @@ function  addBoxes(){
     boxAddString = "";
     for(let i = 0; i < 25; i ++){
         boxAddString += `<div class="boxes">
-                <div onclick="getIdElement(this, this.id)" id="${i}" class="box"></div>
+                <div onclick="getIdElement(this, event)" id="${i}" class="box">
+                    <h1>${String.fromCharCode(i + 65)}</h1>            
+                </div>
             </div>`;
     }
 }addBoxes();
@@ -45,29 +47,14 @@ let timeCounter = 15;
 
 
 
-function reload() {
-    randNum = randomNumber(24, 0);
-
-
-    boxes.forEach((element, index) => {
-            if (randNum === index) {
-                element.style.backgroundColor = "yellow"
-            }
-            element.addEventListener('click', () => {
-                if (index === randNum) {
-                    element.style.backgroundColor = "green";
-                    reload();
-                } else {
-                    element.style.backgroundColor = "red";
-                    reload();
-                }
-            })
-        }
-    )
-}
 let randNum;
 function paintBoxWithRandom(oldElement){
     randNum = randomNumber(24, 0) + "";
+    for (const box of boxes){
+        if (box.id === oldElement){
+            box.style.backgroundColor = "#1c6174";
+        }
+    }
 
     if (randNum === oldElement){
         paintBoxWithRandom(oldElement);
@@ -81,9 +68,9 @@ function paintBoxWithRandom(oldElement){
     }
 }paintBoxWithRandom();
 
-let isOldScore = false;
+let isGameOver = false;
 function checkBestScore(){
-    if(isOldScore) return 0;
+    if(isGameOver) return 0;
 
     yourScore.innerHTML = countScore;
     let oldBestScore = +localStorage.getItem("BestScore");
@@ -132,16 +119,16 @@ function checkBestScore(){
         tr.appendChild(td2);
         tr.appendChild(td3);
     })
+    isGameOver = true;
 
 }
 
-function getIdElement(element, elementId){
-    if (randNum === elementId){
+function getIdElement(element, keyup){
+    if (randNum === element.id || +randNum === keyup.key.charCodeAt() - 97){
         audioWin.play();
         countScore ++;
-        paintBoxWithRandom(elementId + "");
+        paintBoxWithRandom((element.id || keyup.key.charCodeAt() - 97) + "");
         score.innerHTML = countScore;
-        element.style.backgroundColor = "#1c6174"
     }else{
         error.play();
         countScore --;

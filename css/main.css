@@ -61,6 +61,10 @@ body {
 #main .game-box .main-box .box {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
   border-radius: 6px;
   background: #1c6174;
   cursor: pointer;
