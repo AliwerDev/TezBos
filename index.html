@@ -14,6 +14,11 @@
     <title>Fast Click!</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
+
+<div onclick="musicControl()" class="audioControle">
+    <i class="fas fa-volume-mute"></i>
+</div>
+
 <body onkeyup="getIdElement(999, event)">
 <audio id="audio" src="audio.m4a" loop></audio>
 <audio id="audioWin" src="audioWin.wav"></audio>
@@ -25,7 +30,7 @@
                 <div class="starting-box">
                     <h1 class="text-light text-center mt-5">Welcome To "Fast Click"!</h1>
                     <div class="button">
-                        <button id="start" type="button">Start Game</button>
+                        <button id="start" onclick="startGame()" type="button">Start Game</button>
                     </div>
                 </div>
                 <div class="main-box">

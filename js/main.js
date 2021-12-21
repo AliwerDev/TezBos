@@ -8,15 +8,31 @@ const start = document.querySelector("#start");
 const yourScore = document.querySelector("#yourScore");
 const yourRecord = document.querySelector("#yourRecord");
 const tbody = document.querySelector("#tbody");
+const audioBox = document.querySelector(".audioControle");
 
 let isGameStart = false;
-start.addEventListener('click', () => {
+let isMusicPlay = false;
+
+function startGame(){
     startTime();
     startBox.style.display = "none";
     mainBox.style.display = "block";
-    audio.play();
+    isMusicPlay = false;
+    musicControl();
     isGameStart = true;
-})
+}
+
+function musicControl(){
+    if(isMusicPlay) {
+        audio.pause();
+        isMusicPlay = false;
+        audioBox.innerHTML = `<i class="fas fa-volume-mute"></i>`;
+    }else {
+        audio.play();
+        isMusicPlay = true;
+        audioBox.innerHTML = `<i class="fas fa-volume-down"></i>`;
+    }
+}
 
 
 //  VARIABLES OF MIAN
@@ -126,6 +142,10 @@ function checkBestScore(){
 
 function getIdElement(element, keyup){
     if(isGameOver || !isGameStart) return 0;
+    if(!isGameStart && keyup.key === "Enter"){
+        startGame();
+        return 0;
+    }
     if (randNum === element.id || +randNum === keyup.key.charCodeAt() - 97){
         audioWin.play();
         countScore ++;

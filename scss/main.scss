@@ -9,6 +9,29 @@ body {
     background: orange;
     box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.7);
 }
+.audioControle{
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    i{
+        font-size: 30px;
+        transition: all 0.3s ease;
+    }
+    &:hover{
+        i{
+            transform: scale(.9);
+        }
+    }
+
+}
 
 #main{
     .game-box{
@@ -94,6 +117,7 @@ body {
             height: 100% !important;
             text-align: center;
             display: none;
+            
             .your-record{
                 font-size: 24px;
                 font-weight: bold;
