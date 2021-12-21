@@ -9,12 +9,13 @@ const yourScore = document.querySelector("#yourScore");
 const yourRecord = document.querySelector("#yourRecord");
 const tbody = document.querySelector("#tbody");
 
-
+let isGameStart = false;
 start.addEventListener('click', () => {
     startTime();
     startBox.style.display = "none";
     mainBox.style.display = "block";
     audio.play();
+    isGameStart = true;
 })
 
 
@@ -124,6 +125,7 @@ function checkBestScore(){
 }
 
 function getIdElement(element, keyup){
+    if(isGameOver || !isGameStart) return 0;
     if (randNum === element.id || +randNum === keyup.key.charCodeAt() - 97){
         audioWin.play();
         countScore ++;
