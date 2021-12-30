@@ -8,6 +8,14 @@ body {
   font-family: "Space Mono", monospace !important;
 }
 
+tr.active {
+  background-color: #007be0;
+}
+tr.active td {
+  font-weight: bold;
+  font-size: 18px;
+}
+
 .orange {
   background: orange;
   box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.7);
@@ -46,6 +54,10 @@ body {
 }
 #main .game-box .starting-box {
   display: block;
+}
+#main .game-box .starting-box .radios {
+  display: flex;
+  justify-content: space-around;
 }
 #main .game-box .starting-box .button {
   display: flex;
@@ -105,7 +117,7 @@ body {
   width: 100%;
   border-radius: 10px;
   height: 100%;
-  background: #Fff;
+  background: #2ecc71;
   transition: all 1s linear;
 }
 #main .game-box .finishing-box {
@@ -114,20 +126,24 @@ body {
   text-align: center;
   display: none;
 }
-#main .game-box .finishing-box .your-record {
-  font-size: 24px;
+#main .game-box .finishing-box .your-score {
+  font-size: 32px;
   font-weight: bold;
   text-transform: uppercase;
+  color: greenyellow;
 }
-#main .game-box .finishing-box #yourScore, #main .game-box .finishing-box #yourRecord {
+#main .game-box .finishing-box #yourRecord {
   font-size: 32px;
+}
+#main .game-box .finishing-box #yourScore {
+  font-size: 40px;
 }
 #main .game-box .finishing-box .button {
   width: 100%;
   display: flex;
   justify-content: center;
 }
-#main .game-box .finishing-box button {
+#main .game-box .finishing-box .reload {
   width: 80px !important;
   height: 80px !important;
   display: flex;
@@ -137,7 +153,7 @@ body {
   outline: none;
   border-radius: 50%;
 }
-#main .game-box .finishing-box button i {
+#main .game-box .finishing-box .reload i {
   font-size: 40px;
   color: #0F2027;
 }
@@ -145,6 +161,11 @@ body {
 @media screen and (max-width: 768px) {
   .boxes {
     height: 60px !important;
+  }
+
+  .audioControle {
+    top: 10px;
+    right: 10px;
   }
 }
 

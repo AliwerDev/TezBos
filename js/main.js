@@ -4,16 +4,56 @@ const startBox = document.querySelector(".starting-box");
 const audioWin = document.querySelector("#audioWin");
 const audio = document.querySelector("#audio");
 const error = document.querySelector("#error");
-const start = document.querySelector("#start");
 const yourScore = document.querySelector("#yourScore");
 const yourRecord = document.querySelector("#yourRecord");
-const tbody = document.querySelector("#tbody");
+const gameTime = document.querySelector("#gameTime");
+const tables = document.querySelector(".tables");
 const audioBox = document.querySelector(".audioControle");
+const timeLimit = document.querySelectorAll(".timeLimit");
+const line = document.querySelector(".min-line");
+const board = document.querySelector(".bord");
+let boxAddString;
+let allScore15, allScore30, allScore60;
 
+const thead = ` <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Your Best Scores</th>
+                        <th scope="col">Time Limit</th>
+                    </tr>
+                </thead>`
+
+//Boxslarni to`ldiriah
+function  addBoxes(){
+    boxAddString = "";
+    for(let i = 0; i < 25; i ++){
+        boxAddString += `<div class="boxes">
+                <div onclick="getElementId(this)" id="box${i}" class="box">
+                    <h1>${String.fromCharCode(i + 65)}</h1>            
+                </div>
+            </div>`;
+    }
+    board.innerHTML = boxAddString;
+}
+addBoxes();
+
+//Time
+const score = document.querySelector("#score");
+let countScore = 0;
+let maxTime;
+let timeCounter;
+
+//Random sonlar
+function randomNumber(max, min = 0){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+//Starting game
 let isGameStart = false;
 let isMusicPlay = false;
 
 function startGame(){
+    findTimeLimit();
     startTime();
     startBox.style.display = "none";
     mainBox.style.display = "block";
@@ -34,156 +74,112 @@ function musicControl(){
     }
 }
 
+function findTimeLimit(){
+    timeLimit.forEach(element =>{
+        if(element.checked === true){
+            maxTime = +element.value;
+            timeCounter = +element.value;
+        }
+    })
 
-//  VARIABLES OF MIAN
-const board = document.querySelector(".bord")
-let boxAddString;
-
-function  addBoxes(){
-    boxAddString = "";
-    for(let i = 0; i < 25; i ++){
-        boxAddString += `<div class="boxes">
-                <div onclick="getIdElement(this, event)" id="${i}" class="box">
-                    <h1>${String.fromCharCode(i + 65)}</h1>            
-                </div>
-            </div>`;
-    }
-}addBoxes();
-board.innerHTML = boxAddString;
-
-//Random sonlar
-function randomNumber(max, min = 0){
-    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const boxes = document.querySelectorAll(".box");
-const score = document.querySelector("#score");
-let countScore = 0;
-const maxTime = 15;
-let timeCounter = 15;
-
-
-
 let randNum;
-function paintBoxWithRandom(oldElement){
+
+function paintBoxWithRandom(lastPaintElement){
     randNum = randomNumber(24, 0) + "";
-    for (const box of boxes){
-        if (box.id === oldElement){
-            box.style.backgroundColor = "#1c6174";
-        }
+
+    if (randNum === lastPaintElement){
+        paintBoxWithRandom(lastPaintElement);
     }
 
-    if (randNum === oldElement){
-        paintBoxWithRandom(oldElement);
-    }
+    const nowBox = document.querySelector(`#box${randNum}`);
+    const lastBox = document.querySelector(`#box${lastPaintElement}`);
 
-    for (const box of boxes) {
-        if(box.id === randNum){
-            box.style.backgroundColor = "#ff9f1a";
-            break;
-        }
-    }
-}paintBoxWithRandom();
+    lastBox.style.backgroundColor = "#1c6174";
+    nowBox.style.backgroundColor = "#ff9f1a";
+}
+paintBoxWithRandom(0);
 
 let isGameOver = false;
+
 function checkBestScore(){
     if(isGameOver) return 0;
 
     yourScore.innerHTML = countScore;
-    let oldBestScore = +localStorage.getItem("BestScore");
+    gameTime.innerHTML = maxTime + "s";
+    
+    if(maxTime === 15) table15(countScore);
+    if(maxTime === 30) table30(countScore);
+    if(maxTime === 60) table60(countScore);
 
-    if(countScore > oldBestScore){
-        localStorage.setItem("BestScore", countScore);
-        yourRecord.innerHTML = countScore;
-        yourScore.style.color = "green";
-
-    }else{
-        yourRecord.innerHTML = oldBestScore;
-        yourScore.style.color = "red";
-    }
-
-    let allScores = JSON.parse(localStorage.getItem("allScores")) || [];
-
-    let scores = [...allScores, countScore].sort((a, b) => a - b);
-    scores = [...new Set(scores)];
-
-    let topScores = scores.slice(-7);
-
-    localStorage.setItem("allScores", JSON.stringify(scores))
-
-    topScores.reverse().map((e, i) => {
-        const tr = document.createElement("tr");
-        const td1 = document.createElement("td");
-        const td2 = document.createElement("td");
-        const td3 = document.createElement("td");
-
-        td1.innerHTML = i + 1;
-        td2.innerHTML = e;
-        td3.innerHTML = e;
-
-        if(e === countScore){
-            tr.style.backgroundColor = "aqua";
-            td3.style.color = "black";
-            td2.style.color = "black";
-            td1.style.color = "black";
-            td3.style.fontWeight = "bold";
-            td2.style.fontWeight = "bold";
-            td1.style.fontWeight = "bold";
-        }
-
-        tbody.appendChild(tr);
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-    })
+    
     isGameOver = true;
-
 }
 
-function getIdElement(element, keyup){
-    if(isGameOver || !isGameStart) return 0;
-    if(!isGameStart && keyup.key === "Enter"){
-        startGame();
-        return 0;
+const successAnswer = (paintElement) => {
+    audioWin.play();
+    countScore ++;
+    paintBoxWithRandom(paintElement);
+    score.innerHTML = countScore;
+}
+
+function finishGame (){
+    isMusicPlay = true;
+    musicControl();
+    checkBestScore();
+    mainBox.style.display = "none";
+    finishBox.style.display = "block"
+    clearInterval(interval);
+}
+
+const wrongAnswer = () => {
+    error.play();
+    countScore --;
+    if (countScore <= 0){
+        countScore = 0;
+        finishGame();
     }
-    if (randNum === element.id || +randNum === keyup.key.charCodeAt() - 97){
-        audioWin.play();
-        countScore ++;
-        paintBoxWithRandom((element.id || keyup.key.charCodeAt() - 97) + "");
-        score.innerHTML = countScore;
+
+    score.innerHTML = countScore;
+}
+
+const getElementId = (element) => {
+    if(randNum === element.id.slice(3)){
+        successAnswer(randNum);
     }else{
-        error.play();
-        countScore --;
-        if (countScore <= 0){
-            countScore = 0;
-            checkBestScore();
-            mainBox.style.display = "none";
-            finishBox.style.display = "block"
-            clearInterval(interval);
-        }
-        score.innerHTML = countScore;
+        wrongAnswer();
     }
 }
-let interval;
-const line = document.querySelector(".min-line");
+const getKeyUp = (item) => {
+    if(isGameOver || !isGameStart) return 0;
+    
+    const findingId = (item.key.charCodeAt() - 97) + "";
+    if(randNum === findingId){
+        successAnswer(findingId);
+    }
+    else{
+        wrongAnswer();
+    }
+}
+
 function changeWidthLine(){
+    if(timeCounter > maxTime*0.6) line.style.backgroundColor = "#2ecc71";
+    if(timeCounter > maxTime*0.3 && timeCounter < maxTime*0.6) line.style.backgroundColor = "#d35400";
+    if(timeCounter < maxTime*0.3) line.style.backgroundColor = "red";
     line.style.width = (timeCounter / maxTime) * 100 + "%"
 }
 
+//Start timeInterval
+let interval;
 function startTime() {
     interval = setInterval(() => {
-        if(timeCounter <= 0){
-            checkBestScore();
-            mainBox.style.display = "none";
-            finishBox.style.display = "block"
-            clearInterval(interval);
-            return 0;
-        }
+        if(timeCounter <= 0) finishGame();
+
         timeCounter --;
         changeWidthLine();
     }, 1000)
 }
-
 
 function reloadPage(){
     window.location.reload();

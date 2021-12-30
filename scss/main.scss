@@ -5,6 +5,14 @@ body {
     font-family: 'Space Mono', monospace !important;
 }
 
+tr.active{
+    background-color: rgb(0, 123, 224);
+    td{
+        font-weight: bold;
+        font-size: 18px;
+    }
+}
+
 .orange{
     background: orange;
     box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.7);
@@ -45,6 +53,10 @@ body {
         min-height: 100vh;
         .starting-box{
             display: block;
+            .radios{
+                display: flex;
+                justify-content: space-around;
+            }
             .button{
                 display: flex;
                 justify-content: center;
@@ -107,7 +119,7 @@ body {
                     width: 100%;
                     border-radius: 10px;
                     height: 100%;
-                    background: #Fff;
+                    background: #2ecc71;
                     transition: all 1s linear;
                 }
             }
@@ -118,21 +130,25 @@ body {
             text-align: center;
             display: none;
             
-            .your-record{
-                font-size: 24px;
+            .your-score{
+                font-size: 32px;
                 font-weight: bold;
                 text-transform: uppercase;
+                color: greenyellow;
             }
 
-            #yourScore, #yourRecord{
+            #yourRecord{
                 font-size: 32px;
+            }
+            #yourScore {
+                font-size: 40px;
             }
             .button{
                 width: 100%;
                 display: flex;
                 justify-content: center;
             }
-            button{
+            .reload{
                 width: 80px !important;
                 height: 80px !important;
                 display: flex;
@@ -154,5 +170,9 @@ body {
 @media screen and (max-width: 768px) {
     .boxes{
         height: 60px !important;
+    }
+    .audioControle{
+        top: 10px;
+        right: 10px;
     }
 }
